@@ -37,7 +37,18 @@ export default function Register() {
     }
     setLoading(true);
     try {
-      const { confirm_password, province, ...payload } = form;
+      // ─── FIX: build payload manually instead of destructuring
+      //          so ESLint doesn't complain about "assigned but never used"
+      const payload = {
+        full_name: form.full_name,
+        email:     form.email,
+        phone:     form.phone,
+        password:  form.password,
+        role:      form.role,
+        country:   form.country,
+        province:  form.province,
+      };
+
       const user = await register(payload);
       toast.success(`Welcome to Lenda, ${user.full_name.split(' ')[0]}!`);
       navigate(`/${user.role}`);
@@ -65,13 +76,15 @@ export default function Register() {
 
           {/* Role Selector */}
           <div className="flex gap-3 mb-5">
-            {['borrower','lender'].map(r => (
+            {['borrower', 'lender'].map(r => (
               <button
                 key={r}
                 type="button"
                 onClick={() => update('role', r)}
                 className={`flex-1 py-2.5 rounded-lg text-sm font-medium capitalize transition-colors ${
-                  form.role === r ? 'bg-amber-400 text-slate-900' : 'bg-slate-800 text-slate-400 hover:text-white border border-slate-700'
+                  form.role === r
+                    ? 'bg-amber-400 text-slate-900'
+                    : 'bg-slate-800 text-slate-400 hover:text-white border border-slate-700'
                 }`}
               >
                 I want to {r === 'borrower' ? 'borrow' : 'lend'}
@@ -82,29 +95,46 @@ export default function Register() {
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
               <label className="block text-sm text-slate-400 mb-1.5">Full Name</label>
-              <input type="text" required value={form.full_name} onChange={e => update('full_name', e.target.value)}
+              <input
+                type="text"
+                required
+                value={form.full_name}
+                onChange={e => update('full_name', e.target.value)}
                 className="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-2.5 text-white placeholder-slate-500 focus:outline-none focus:border-amber-400 transition-colors"
-                placeholder="Thabo Nkosi" />
+                placeholder="Thabo Nkosi"
+              />
             </div>
 
             <div>
               <label className="block text-sm text-slate-400 mb-1.5">Email</label>
-              <input type="email" required value={form.email} onChange={e => update('email', e.target.value)}
+              <input
+                type="email"
+                required
+                value={form.email}
+                onChange={e => update('email', e.target.value)}
                 className="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-2.5 text-white placeholder-slate-500 focus:outline-none focus:border-amber-400 transition-colors"
-                placeholder="you@example.co.za" />
+                placeholder="you@example.co.za"
+              />
             </div>
 
             <div>
               <label className="block text-sm text-slate-400 mb-1.5">Phone Number</label>
-              <input type="tel" value={form.phone} onChange={e => update('phone', e.target.value)}
+              <input
+                type="tel"
+                value={form.phone}
+                onChange={e => update('phone', e.target.value)}
                 className="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-2.5 text-white placeholder-slate-500 focus:outline-none focus:border-amber-400 transition-colors"
-                placeholder="+27 82 123 4567" />
+                placeholder="+27 82 123 4567"
+              />
             </div>
 
             <div>
               <label className="block text-sm text-slate-400 mb-1.5">Province</label>
-              <select value={form.province} onChange={e => update('province', e.target.value)}
-                className="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-amber-400 transition-colors">
+              <select
+                value={form.province}
+                onChange={e => update('province', e.target.value)}
+                className="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-amber-400 transition-colors"
+              >
                 <option value="">Select Province</option>
                 {PROVINCES.map(p => <option key={p} value={p}>{p}</option>)}
               </select>
@@ -112,25 +142,40 @@ export default function Register() {
 
             <div>
               <label className="block text-sm text-slate-400 mb-1.5">Password</label>
-              <input type="password" required value={form.password} onChange={e => update('password', e.target.value)}
+              <input
+                type="password"
+                required
+                value={form.password}
+                onChange={e => update('password', e.target.value)}
                 className="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-2.5 text-white placeholder-slate-500 focus:outline-none focus:border-amber-400 transition-colors"
-                placeholder="Min 8 characters" />
+                placeholder="Min 8 characters"
+              />
             </div>
 
             <div>
               <label className="block text-sm text-slate-400 mb-1.5">Confirm Password</label>
-              <input type="password" required value={form.confirm_password} onChange={e => update('confirm_password', e.target.value)}
+              <input
+                type="password"
+                required
+                value={form.confirm_password}
+                onChange={e => update('confirm_password', e.target.value)}
                 className={`w-full bg-slate-800 border rounded-lg px-4 py-2.5 text-white placeholder-slate-500 focus:outline-none transition-colors ${
-                  form.confirm_password && form.password !== form.confirm_password ? 'border-red-500' : 'border-slate-700 focus:border-amber-400'
+                  form.confirm_password && form.password !== form.confirm_password
+                    ? 'border-red-500'
+                    : 'border-slate-700 focus:border-amber-400'
                 }`}
-                placeholder="Repeat password" />
+                placeholder="Repeat password"
+              />
               {form.confirm_password && form.password !== form.confirm_password && (
                 <p className="text-red-400 text-xs mt-1">Passwords do not match</p>
               )}
             </div>
 
-            <button type="submit" disabled={loading || (form.confirm_password && form.password !== form.confirm_password)}
-              className="w-full bg-amber-400 hover:bg-amber-300 text-slate-900 font-semibold rounded-lg py-2.5 transition-colors disabled:opacity-50 disabled:cursor-not-allowed mt-2">
+            <button
+              type="submit"
+              disabled={loading || (form.confirm_password && form.password !== form.confirm_password)}
+              className="w-full bg-amber-400 hover:bg-amber-300 text-slate-900 font-semibold rounded-lg py-2.5 transition-colors disabled:opacity-50 disabled:cursor-not-allowed mt-2"
+            >
               {loading ? 'Creating account...' : 'Create Account'}
             </button>
           </form>

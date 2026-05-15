@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { axios } from '../../context/AuthContext';
+import api from '../../api/axios';
 import Layout from '../../components/Layout';
 import toast from 'react-hot-toast';
 import { Check, X, Eye, ChevronDown } from 'lucide-react';
@@ -31,7 +31,7 @@ function ApproveModal({ loan, onClose, onSuccess }) {
     if (!rate || parseFloat(rate) <= 0) { toast.error('Enter a valid interest rate'); return; }
     setLoading(true);
     try {
-      await axios.put(`/admin/loans/${loan.id}/approve`, { interest_rate: parseFloat(rate), admin_notes: notes });
+      await api.put(`/admin/loans/${loan.id}/approve`, { interest_rate: parseFloat(rate), admin_notes: notes });
       toast.success('Loan approved and listed on marketplace!');
       onSuccess();
       onClose();
@@ -98,7 +98,7 @@ function RejectModal({ loan, onClose, onSuccess }) {
     if (!reason.trim()) { toast.error('Please provide a rejection reason'); return; }
     setLoading(true);
     try {
-      await axios.put(`/admin/loans/${loan.id}/reject`, { admin_notes: reason });
+      await api.put(`/admin/loans/${loan.id}/reject`, { admin_notes: reason });
       toast.success('Application rejected');
       onSuccess();
       onClose();
@@ -144,7 +144,7 @@ export default function AdminLoans() {
   const fetchLoans = async () => {
     setLoading(true);
     try {
-      const { data } = await axios.get(`/admin/loans?status=${activeTab}`);
+      const { data } = await api.get(`/admin/loans?status=${activeTab}`);
       setLoans(data.data);
     } catch {
       toast.error('Failed to load loans');

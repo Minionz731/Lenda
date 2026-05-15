@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import Layout from '../../components/Layout';
-import { axios } from '../../context/AuthContext';
+import api from '../../api/axios';
 import toast from 'react-hot-toast';
 import { ShieldCheck, X, Check, Eye, Clock, AlertTriangle } from 'lucide-react';
 
@@ -20,7 +20,7 @@ function KYCDetailModal({ kyc, onClose, onAction }) {
   const handleApprove = async () => {
     setLoading(true);
     try {
-      await axios.put(`/admin/kyc/${kyc.id}/approve`);
+      await api.put(`/admin/kyc/${kyc.id}/approve`);
       toast.success('KYC approved');
       onAction();
       onClose();
@@ -33,7 +33,7 @@ function KYCDetailModal({ kyc, onClose, onAction }) {
     if (!reason.trim()) { toast.error('Please enter a rejection reason'); return; }
     setLoading(true);
     try {
-      await axios.put(`/admin/kyc/${kyc.id}/reject`, { rejection_reason: reason });
+      await api.put(`/admin/kyc/${kyc.id}/reject`, { rejection_reason: reason });
       toast.success('KYC rejected');
       onAction();
       onClose();
@@ -180,7 +180,7 @@ export default function AdminKYC() {
   const fetchQueue = async () => {
     setLoading(true);
     try {
-      const { data } = await axios.get(`/admin/kyc?status=${status}`);
+      const { data } = await api.get(`/admin/kyc?status=${status}`);
       setQueue(data);
     } catch {
       toast.error('Failed to load KYC queue');

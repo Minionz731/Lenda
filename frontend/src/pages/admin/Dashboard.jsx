@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { axios } from '../../context/AuthContext';
+import api from '../../api/axios';
 import Layout from '../../components/Layout';
 import toast from 'react-hot-toast';
 import { Users, FileText, ShieldCheck, DollarSign, TrendingUp, ArrowRight, Clock } from 'lucide-react';
@@ -15,9 +15,9 @@ export default function AdminDashboard() {
     const load = async () => {
       try {
         const [analyticsRes, loansRes, kycRes] = await Promise.all([
-          axios.get('/admin/analytics'),
-          axios.get('/admin/loans?status=submitted&limit=5'),
-          axios.get('/admin/kyc?status=pending'),
+          api.get('/admin/analytics'),
+          api.get('/admin/loans?status=submitted&limit=5'),
+          api.get('/admin/kyc?status=pending'),
         ]);
         setAnalytics(analyticsRes.data);
         setRecentLoans(loansRes.data.data);

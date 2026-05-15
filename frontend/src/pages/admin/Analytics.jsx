@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import Layout from '../../components/Layout';
-import { axios } from '../../context/AuthContext';
+import api from '../../api/axios';
 import toast from 'react-hot-toast';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend } from 'recharts';
 import { TrendingUp, Users, DollarSign, Percent } from 'lucide-react';
@@ -28,7 +28,7 @@ export default function AdminAnalytics() {
   useEffect(() => {
     const load = async () => {
       try {
-        const { data: res } = await axios.get('/admin/analytics');
+        const { data: res } = await api.get('/admin/analytics');
         setData(res);
       } catch {
         toast.error('Failed to load analytics');

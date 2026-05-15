@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { axios } from '../../context/AuthContext';
+import api from '../../api/axios';
 import Layout from '../../components/Layout';
 import { FileText, TrendingUp, AlertCircle, CheckCircle, Clock, Plus, ArrowRight } from 'lucide-react';
 import toast from 'react-hot-toast';
@@ -33,8 +33,8 @@ export default function BorrowerDashboard() {
     const load = async () => {
       try {
         const [loansRes, profileRes] = await Promise.all([
-          axios.get('/borrower/loans'),
-          axios.get('/auth/me'),
+          api.get('/borrower/loans'),
+          api.get('/auth/me'),
         ]);
         setLoans(loansRes.data);
         setKyc(profileRes.data.kyc_status);

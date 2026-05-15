@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Layout from '../../components/Layout';
-import { axios } from '../../context/AuthContext';
+import api from '../../api/axios';
 import toast from 'react-hot-toast';
 import { Plus, FileText, Clock, ChevronDown, ChevronUp, Download } from 'lucide-react';
 
@@ -133,7 +133,7 @@ export default function BorrowerLoans() {
   useEffect(() => {
     const load = async () => {
       try {
-        const { data } = await axios.get('/borrower/loans');
+        const { data } = await api.get('/borrower/loans');
         setLoans(data);
       } catch {
         toast.error('Failed to load applications');

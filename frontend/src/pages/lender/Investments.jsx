@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import Layout from '../../../components/Layout';
-import { axios } from '../../context/AuthContext';
+import Layout from '../../components/Layout';
+import api from '../../api/axios';
 import toast from 'react-hot-toast';
 import { TrendingUp, Globe, Calendar } from 'lucide-react';
 
@@ -28,7 +28,7 @@ export default function LenderInvestments() {
   useEffect(() => {
     const load = async () => {
       try {
-        const { data } = await axios.get('/lender/investments');
+        const { data } = await api.get('/lender/investments');
         setInvestments(data);
       } catch {
         toast.error('Failed to load investments');

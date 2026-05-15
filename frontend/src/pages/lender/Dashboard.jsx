@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Layout from '../../components/Layout';
-import { axios } from '../../context/AuthContext';
+import api from '../../api/axios';
 import toast from 'react-hot-toast';
 import { TrendingUp, DollarSign, Search, AlertCircle, ArrowRight, Wallet } from 'lucide-react';
 
@@ -16,10 +16,10 @@ export default function LenderDashboard() {
     const load = async () => {
       try {
         const [profRes, invRes, listRes, meRes] = await Promise.all([
-          axios.get('/lender/profile'),
-          axios.get('/lender/investments'),
-          axios.get('/lender/marketplace?limit=3'),
-          axios.get('/auth/me'),
+          api.get('/lender/profile'),
+          api.get('/lender/investments'),
+          api.get('/lender/marketplace?limit=3'),
+          api.get('/auth/me'),
         ]);
         setProfile(profRes.data);
         setInvestments(invRes.data);

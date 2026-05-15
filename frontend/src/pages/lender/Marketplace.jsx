@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { axios } from '../../context/AuthContext';
+import api from '../../api/axios';
 import Layout from '../../components/Layout';
 import toast from 'react-hot-toast';
 import { Search, Filter, TrendingUp, Clock, Globe, DollarSign, X } from 'lucide-react';
@@ -25,7 +25,7 @@ function InvestModal({ listing, onClose, onSuccess }) {
     }
     setLoading(true);
     try {
-      await axios.post(`/lender/marketplace/${listing.id}/invest`, { amount: val });
+      await api.post(`/lender/marketplace/${listing.id}/invest`, { amount: val });
       toast.success('Investment placed successfully!');
       onSuccess();
       onClose();
@@ -102,7 +102,7 @@ export default function LenderMarketplace() {
       const params = new URLSearchParams();
       if (filters.risk_grade) params.set('risk_grade', filters.risk_grade);
       if (filters.term_months) params.set('term_months', filters.term_months);
-      const { data } = await axios.get(`/lender/marketplace?${params}`);
+      const { data } = await api.get(`/lender/marketplace?${params}`);
       setListings(data.data);
     } catch {
       toast.error('Failed to load marketplace');

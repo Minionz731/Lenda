@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import Layout from '../../components/Layout';
-import { axios } from '../../context/AuthContext';
+import api from '../../api/axios';
 import toast from 'react-hot-toast';
 import { Search, Shield, Ban, CheckCircle } from 'lucide-react';
 
@@ -30,7 +30,7 @@ export default function AdminUsers() {
       const params = new URLSearchParams();
       if (roleFilter !== 'all')   params.set('role', roleFilter);
       if (statusFilter !== 'all') params.set('status', statusFilter);
-      const { data } = await axios.get(`/admin/users?${params}&limit=50`);
+      const { data } = await api.get(`/admin/users?${params}&limit=50`);
       setUsers(data.data || []);
     } catch {
       toast.error('Failed to load users');
@@ -43,7 +43,7 @@ export default function AdminUsers() {
 
   const updateStatus = async (userId, status) => {
     try {
-      await axios.put(`/admin/users/${userId}/status`, { status });
+      await api.put(`/admin/users/${userId}/status`, { status });
       toast.success(`User ${status}`);
       fetchUsers();
     } catch (err) {

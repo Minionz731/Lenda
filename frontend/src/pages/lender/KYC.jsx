@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { axios } from '../../context/AuthContext';
+import api from '../../api/axios';
 import Layout from '../../components/Layout';
 import toast from 'react-hot-toast';
 import { ShieldCheck, Building2, Info, Check, ChevronRight } from 'lucide-react';
@@ -78,7 +78,7 @@ export default function LenderKYC() {
     if (!form.popia_consent || !form.nca_consent) { toast.error('Please provide both consents'); return; }
     setLoading(true);
     try {
-      await axios.post('/kyc/submit', form);
+      await api.post('/kyc/submit', form);
       setDone(true);
       toast.success('KYC submitted! Verification in progress.');
     } catch (err) {

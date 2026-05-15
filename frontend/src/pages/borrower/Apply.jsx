@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { axios } from '../../context/AuthContext';
+import api from '../../api/axios';
 import Layout from '../../components/Layout';
 import toast from 'react-hot-toast';
 import { Upload, ChevronRight, ChevronLeft, Check } from 'lucide-react';
@@ -43,7 +43,7 @@ export default function BorrowerApply() {
     }
     setLoading(true);
     try {
-      const { data } = await axios.post('/borrower/loans', form);
+      const { data } = await api.post('/borrower/loans', form);
       setApplicationId(data.id);
       setStep(1);
     } catch (err) {
@@ -59,7 +59,7 @@ export default function BorrowerApply() {
     formData.append('file', file);
     formData.append('doc_type', docType);
     try {
-      await axios.post(`/borrower/loans/${applicationId}/documents`, formData, {
+      await api.post(`/borrower/loans/${applicationId}/documents`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
       setFiles((prev) => [...prev, { name: file.name, type: docType }]);
@@ -77,7 +77,7 @@ export default function BorrowerApply() {
     }
     setLoading(true);
     try {
-      await axios.put(`/borrower/loans/${applicationId}/submit`);
+      await api.put(`/borrower/loans/${applicationId}/submit`);
       toast.success('Application submitted! We will review it within 2–3 business days.');
       navigate('/borrower/loans');
     } catch (err) {

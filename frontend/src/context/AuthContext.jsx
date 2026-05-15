@@ -22,7 +22,7 @@ axios.interceptors.response.use(
       original._retry = true;
       try {
         const refresh = localStorage.getItem('refreshToken');
-        const { data } = await axios.post('/auth/refresh', { refreshToken: refresh });
+        const { data } = await api.post('/auth/refresh', { refreshToken: refresh });
         localStorage.setItem('accessToken', data.accessToken);
         localStorage.setItem('refreshToken', data.refreshToken);
         original.headers.Authorization = `Bearer ${data.accessToken}`;
@@ -44,7 +44,7 @@ export const AuthProvider = ({ children }) => {
 
   const fetchMe = useCallback(async () => {
     try {
-      const { data } = await axios.get('/auth/me');
+      const { data } = await api.get('/auth/me');
       setUser(data);
     } catch {
       setUser(null);
@@ -62,7 +62,7 @@ export const AuthProvider = ({ children }) => {
   }, [fetchMe]);
 
   const login = async (email, password) => {
-    const { data } = await axios.post('/auth/login', { email, password });
+    const { data } = await api.post('/auth/login', { email, password });
     localStorage.setItem('accessToken', data.accessToken);
     localStorage.setItem('refreshToken', data.refreshToken);
     setUser(data.user);
@@ -70,7 +70,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const register = async (formData) => {
-    const { data } = await axios.post('/auth/register', formData);
+    const { data } = await api.post('/auth/register', formData);
     localStorage.setItem('accessToken', data.accessToken);
     localStorage.setItem('refreshToken', data.refreshToken);
     setUser(data.user);
