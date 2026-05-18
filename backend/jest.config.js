@@ -1,15 +1,14 @@
 module.exports = {
   testEnvironment: 'node',
-  collectCoverageFrom: [
-    'src/**/*.js',
-    '!src/**/*.test.js',
-    '!src/**/*.spec.js',
-  ],
+  setupFilesAfterFramework: ['./jest.setup.js'],
+  testMatch: ['**/__tests__/**/*.js', '**/*.test.js'],
   coverageDirectory: 'coverage',
-  coverageReporters: ['text', 'lcov', 'html'],
-  testMatch: [
-    '**/__tests__/**/*.js',
-    '**/?(*.)+(spec|test).js',
+  collectCoverageFrom: [
+    '**/*.js',
+    '!node_modules/**',
+    '!coverage/**',
+    '!jest.setup.js',
+    '!jest.config.js',
   ],
-  setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
+  verbose: true,
 };
